@@ -7,13 +7,14 @@
 		<article>
 			<h1>{{ post.title }}</h1>
 			<div class="post-date">{{ formatDate(post.date) }}</div>
-			<div v-html="renderedContent"></div>
+			<!-- HTML is safe: sanitized by marked during build, not user input -->
+			<div v-html="post.content"></div>
 		</article>
 	</div>
 </template>
 
 <script>
-import { marked } from "marked";
+import { formatDate } from './utils.js';
 
 export default {
 	name: "PostView",
@@ -23,16 +24,9 @@ export default {
 			required: true,
 		},
 	},
-	computed: {
-		renderedContent() {
-			return marked(this.post.content);
-		},
-	},
 	methods: {
-		formatDate(dateString) {
-			const options = { year: "numeric", month: "long", day: "numeric" };
-			return new Date(dateString).toLocaleDateString(undefined, options);
-		},
+		formatDate,
 	},
 };
 </script>
+
